@@ -1,3 +1,5 @@
+# From: https://muug.ca/mirror/rpmfusion/free/el/updates/8/SRPMS/repoview/ffmpeg.html
+
 %define __spec_install_post %{nil}
 %define debug_package %{nil}
 %define __os_install_post %{_dbpath}/brp-compress
