@@ -1,0 +1,35 @@
+on:
+
+  push:
+    tags:
+    - 'v*' # Push events to matching v*, i.e. v1.0, v20.15.10
+  workflow_dispatch:
+
+
+name: Build Release
+jobs:
+
+  build:
+
+    name: Upload Release Asset
+    runs-on: ubuntu-latest
+    steps:
+      
+      - name: Checkout code
+        uses: actions/checkout@v2
+        with:
+          submodules: recursive
+
+      - name: Build Packages
+        run: |
+          echo ref: '${{ github.ref }}'
+          echo ref_name: '${{ github.ref_name }}'
+          make BUILD_VERSION=${{ github.ref_name }}
+
+      - name: Create a Release
+        uses: "marvinpinto/action-automatic-releases@latest"
+        with:
+          repo_token: "${{ secrets.GITHUB_TOKEN }}"
+          prerelease: false
+          files: |
+            dist/*.rpm
