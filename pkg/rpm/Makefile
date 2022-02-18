@@ -1,12 +1,20 @@
 RPM_DOCK_IMG=ffbuilder-rpm
 RPM_DOCK_CTR=$(RPM_DOCK_IMG)c
 
-RPM_BUILD_CMD=rpmbuild --define "_topdir `mktemp -d`" --define "build_version $(B_VERSION)" -ba pkg/rpm/video-gadgets.spec
+RPM_BUILD_CMD=make build-rpm
+#RPM_BUILD_CMD=cd FFmpeg; rpmbuild --define "_topdir `mktemp -d`" -bc ../pkg/rpm/ffmpeg.spec
+#RPM_BUILD_CMD=/bin/bash
+#RPM_BUILD_CMD=dnf builddep pkg/rpm/ffmpeg.spec
 
 build ::
 	docker build --pull --rm --tag $(RPM_DOCK_IMG) --file pkg/rpm/Dockerfile .
 	-@docker rm $(RPM_DOCK_CTR)
-	docker run -v $(PWD):/home/build --user="`id -u`:`id -g`" --name $(RPM_DOCK_CTR) $(RPM_DOCK_IMG) $(RPM_BUILD_CMD)
+	docker run -it -v $(PWD):/home/build --user="`id -u`:`id -g`" --name $(RPM_DOCK_CTR) $(RPM_DOCK_IMG) $(RPM_BUILD_CMD)
+#	docker run -v $(PWD):/home/build --user="`id -u`:`id -g`" --name $(RPM_DOCK_CTR) $(RPM_DOCK_IMG) $(RPM_BUILD_CMD)
+
+build-rpm:
+	bash
+	cd FFmpeg && rpmbuild --define "_topdir `mktemp -d`" --build-in-place -bb ../pkg/rpm/ffmpeg.spec
 
 clean ::
 	-@docker container rm --force $(RPM_DOCK_CTR)
