@@ -220,6 +220,16 @@ Libavdevice is a complementary library to libavf "libavformat". It provides
 various "special" platform-specific muxers and demuxers, e.g. for grabbing
 devices, audio capture and playback etc.
 
+%package        tools
+Summary:        Tools for %{name}
+Requires:       %{name}-libs%{_isa} = %{version}-%{release}
+Requires:       libavdevice%{?flavor}%{_isa} = %{version}-%{release}
+Requires:       pkgconfig
+
+%description    tools
+This package contains tools for %{name} - utilities like zmqsend,
+aviocat, ffescape etc.
+
 %package        devel
 Summary:        Development package for %{name}
 Requires:       %{name}-libs%{_isa} = %{version}-%{release}
@@ -397,7 +407,23 @@ install -pm755 tools/qt-faststart %{buildroot}%{_bindir}
 %ldconfig_scriptlets  libs
 %ldconfig_scriptlets -n libavdevice%{?flavor}
 
-
+# install other tools
+install -pm755 tools/aviocat %{buildroot}%{_bindir}
+install -pm755 tools/cws2fws %{buildroot}%{_bindir}
+install -pm755 tools/dvd2concat %{buildroot}%{_bindir}
+install -pm755 tools/enum_options %{buildroot}%{_bindir}
+install -pm755 tools/ffescape %{buildroot}%{_bindir}
+install -pm755 tools/ffeval %{buildroot}%{_bindir}
+install -pm755 tools/ffhash %{buildroot}%{_bindir}
+install -pm755 tools/graph2dot %{buildroot}%{_bindir}
+install -pm755 tools/ismindex %{buildroot}%{_bindir}
+install -pm755 tools/murge %{buildroot}%{_bindir}
+install -pm755 tools/pktdumper %{buildroot}%{_bindir}
+install -pm755 tools/plotframes %{buildroot}%{_bindir}
+install -pm755 tools/seek_print %{buildroot}%{_bindir}
+install -pm755 tools/sidxindex %{buildroot}%{_bindir}
+install -pm755 tools/zmqsend %{buildroot}%{_bindir}
+install -pm755 tools/zmqshell.py %{buildroot}%{_bindir}
 
 %if 0%{!?_without_tools:1}
 %files
@@ -433,6 +459,25 @@ install -pm755 tools/qt-faststart %{buildroot}%{_bindir}
 %{_includedir}/%{name}
 %{_libdir}/pkgconfig/lib*.pc
 %{_libdir}/lib*.so
+
+%files tools
+%{_bindir}/aviocat
+%{_bindir}/cws2fws
+%{_bindir}/dvd2concat
+%{_bindir}/enum_options
+%{_bindir}/ffescape
+%{_bindir}/ffeval
+%{_bindir}/ffhash
+%{_bindir}/graph2dot
+%{_bindir}/ismindex
+%{_bindir}/murge
+%{_bindir}/pktdumper
+%{_bindir}/plotframes
+%{_bindir}/seek_print
+%{_bindir}/sidxindex
+%{_bindir}/zmqsend
+%{_bindir}/zmqshell.py
+
 
 
 %changelog
