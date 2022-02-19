@@ -3,7 +3,7 @@ RPM_DOCK_IMG=ffbuilder-rpm
 RPM_DOCK_CTR=$(RPM_DOCK_IMG)c
 
 # Entry point
-build :: build-image
+build :: build-image patch
 	-@docker rm $(RPM_DOCK_CTR)
 	docker run -v $(PWD):/home/build --user="`id -u`:`id -g`" --name $(RPM_DOCK_CTR) $(RPM_DOCK_IMG) make ctr-build
 
@@ -25,6 +25,9 @@ ctr-rpmlist ::
 # Builds the docker image
 build-image ::
 	docker build --pull --rm --tag $(RPM_DOCK_IMG) --file Dockerfile .
+
+patch ::
+	cd FFmpeg && patch -p 1 -N  < ../alternative_input.patch || true
 
 clean ::
 	-@docker container rm --force $(RPM_DOCK_CTR)

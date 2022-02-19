@@ -394,6 +394,7 @@ cp -pr doc/examples/{*.c,Makefile,README} _doc/examples/
 %make_build -j6
 make documentation V=1
 make alltools V=1
+make examples
 
 %install
 %make_install V=1
@@ -424,6 +425,7 @@ install -pm755 tools/seek_print %{buildroot}%{_bindir}
 install -pm755 tools/sidxindex %{buildroot}%{_bindir}
 install -pm755 tools/zmqsend %{buildroot}%{_bindir}
 install -pm755 tools/zmqshell.py %{buildroot}%{_bindir}
+install -pm755 doc/examples/alternative_input %{buildroot}%{_bindir}
 
 %if 0%{!?_without_tools:1}
 %files
@@ -477,7 +479,7 @@ install -pm755 tools/zmqshell.py %{buildroot}%{_bindir}
 %{_bindir}/sidxindex
 %{_bindir}/zmqsend
 %{_bindir}/zmqshell.py
-
+%{_bindir}/alternative_input
 
 
 %changelog
