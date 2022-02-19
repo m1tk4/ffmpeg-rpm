@@ -10,7 +10,9 @@ Includes several ffmpeg tools and few non-official patches, namely:
 ## Installation
 
 ```bash
-dnf -y install --nogpgcheck dnf-plugins-core https://dl.fedoraproject.org/pub/epel/epel-release-latest-8.noarch.rpm; \
+dnf -y install --nogpgcheck \
+    dnf-plugins-core \
+    https://dl.fedoraproject.org/pub/epel/epel-release-latest-8.noarch.rpm; \
 dnf -y config-manager --enable powertools; \
 dnf -y install https://mirrors.rpmfusion.org/free/el/rpmfusion-free-release-8.noarch.rpm \
     https://mirrors.rpmfusion.org/nonfree/el/rpmfusion-nonfree-release-8.noarch.rpm;
