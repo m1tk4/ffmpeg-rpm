@@ -3,14 +3,28 @@ RPM_DOCK_IMG=ffbuilder-rpm
 RPM_DOCK_CTR=$(RPM_DOCK_IMG)c
 
 # Entry point
-build ::
-	docker build --pull --rm --tag $(RPM_DOCK_IMG) --file Dockerfile .
+build :: build-image
 	-@docker rm $(RPM_DOCK_CTR)
-	docker run -v $(PWD):/home/build --user="`id -u`:`id -g`" --name $(RPM_DOCK_CTR) $(RPM_DOCK_IMG) make build-rpm
+	docker run -v $(PWD):/home/build --user="`id -u`:`id -g`" --name $(RPM_DOCK_CTR) $(RPM_DOCK_IMG) make ctr-build
 
 # Run within docker to actually build the RPM
-build-rpm ::
+ctr-build::
 	cd FFmpeg && rpmbuild --define "_topdir `mktemp -d`" --build-in-place -bb ../ffmpeg.spec
+
+# Re-build the list of RPMs needed for building
+rpmlist :: build-image
+	-@docker rm $(RPM_DOCK_CTR)
+	docker run -v $(PWD):/home/build --name $(RPM_DOCK_CTR) $(RPM_DOCK_IMG) make ctr-rpmlist
+
+# Run in docker and rebuild the list of RPMs needed for building
+ctr-rpmlist ::
+	dnf -y builddep ffmpeg.spec
+	dnf repoquery --userinstalled --qf "%{name}" > rpmlist.txt
+	chown --reference=ffmpeg.spec rpmlist.txt
+
+# Builds the docker image
+build-image ::
+	docker build --pull --rm --tag $(RPM_DOCK_IMG) --file Dockerfile .
 
 clean ::
 	-@docker container rm --force $(RPM_DOCK_CTR)
