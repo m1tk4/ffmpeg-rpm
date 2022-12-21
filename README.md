@@ -1,6 +1,6 @@
 # ffmpeg-rpm
 
-RPM Spec and build env Docker container to build ffmpeg5 RPM on Rocky, significantly 
+RPM Spec and build env Docker container to build ffmpeg5 RPM on Rocky 8, significantly 
 influenced by the work done by the folks at https://rpmfusion.org/.
 
 Includes several ffmpeg tools and few non-official patches, namely:
